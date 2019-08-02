@@ -37,7 +37,7 @@ print(statChecker.perform_homogeneity_tests())  # Expected output is 'True'
 
 ## TODO(s)
 
-* Add function enlarge sample sizes via bootstrapping 
+* Add function to increase number of samples via bootstrapping 
 
 Note
 ====
