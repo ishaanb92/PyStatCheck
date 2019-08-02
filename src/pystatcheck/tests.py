@@ -45,12 +45,12 @@ class CheckHomogeneity:
                 _, p = ttest_ind(self.arr1, self.arr2, equal_var=True)
                 if p > self.alpha:
                     if self.verbose is True:
-                        print('Distributions are homogeneous according to t-test (equal variance).'
+                        print('Distributions have the same mean according to t-test (equal variance).'
                               'p-value : {}'.format(p))
                     return True
                 else:
                     if self.verbose is True:
-                        print('Distributions are not homogeneous according to t-test (equal variance).'
+                        print('Distributions do not have the same mean according to t-test (equal variance).'
                               'p-value : {}'.format(p))
                     return False
 
@@ -59,12 +59,12 @@ class CheckHomogeneity:
                 _, p = ttest_ind(self.arr1, self.arr2, equal_var=False)
                 if p > self.alpha:
                     if self.verbose is True:
-                        print('Distributions are homogeneous according to t-test (unequal variance).'
+                        print('Distributions have the same mean according to t-test (unequal variance).'
                               'p-value : {}'.format(p))
                     return True
                 else:
                     if self.verbose is True:
-                        print('Distributions are not homogeneous according to t-test (unequal variance).'
+                        print('Distributions do not have the same mean according to t-test (unequal variance).'
                               'p-value : {}'.format(p))
                     return False
         else:
@@ -82,12 +82,12 @@ class CheckHomogeneity:
             _, p = mannwhitneyu(self.arr1, self.arr2)
             if p > self.alpha:
                 if self.verbose is True:
-                    print('Distributions are homogeneous according to the Mann-Whitney U test.'
+                    print('Distributions have the same median according to the Mann-Whitney U test.'
                           'p-value : {}'.format(p))
                 return True
             else:
                 if self.verbose is True:
-                    print('Distributions are not homogeneous according to Mann-Whitney U test.'
+                    print('Distributions do not have the same median according to Mann-Whitney U test.'
                           'p-value : {}'.format(p))
                 return False
 
