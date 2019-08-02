@@ -35,6 +35,10 @@ statChecker = CheckHomogeneity(arr1=arr1, arr2=arr2, verbose=False)
 print(statChecker.perform_homogeneity_tests())  # Expected output is 'True' 
 ```
 
+## TODO(s)
+
+* Add function enlarge sample sizes via bootstrapping 
+
 Note
 ====
 
