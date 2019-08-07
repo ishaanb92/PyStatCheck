@@ -108,20 +108,26 @@ class CheckHomogeneity:
                           'p-value : {}'.format(p))
                 return False
 
-    def visualize_distributions(self, fname='data_viz.png', b_steps=1000):
+    def visualize_distributions(self, fname='data_viz.png', b_steps=1000, names=None):
         """
         Visualize distribution plots by by plotting a histogram of bootstrap sample means
 
         :param fname: (str) Filename used to save the image
         :param b_steps: (int) Number of sampling steps to create one bootstrap sample
+        :param names: (str) List of strings to be used as a the name
         :return:
         """
         sample_means_arr1 = self._bootstrap(self.arr1, b_steps=b_steps)
         sample_means_arr2 = self._bootstrap(self.arr2, b_steps=b_steps)
-        sns.distplot(sample_means_arr1, label='Distribution 1')
-        sns.distplot(sample_means_arr2, label='Distribution 2')
+        if names is None:
+            labels = ['Distribution 1', 'Distribution 2']
+        else:
+            labels = names
+        sns.distplot(sample_means_arr1, label=labels[0])
+        sns.distplot(sample_means_arr2, label=labels[1])
         plt.legend()
         plt.savefig(fname)
+        plt.close()
 
     @staticmethod
     def _bootstrap(col, b_steps=1000):
