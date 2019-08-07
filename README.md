@@ -53,7 +53,7 @@ even though the distributions are clearly different from each other.
 In case of low sample-sizes, it is always useful to create many bootstrapped 
 samples and plot the sample means in a histogram to qualitatively examine the distributions.
 ```python
-statChecker.visualize_distributions() 
+statChecker.visualize_distributions(fname='data_viz.png', b_steps=1000) 
 ```
 ![Dist Image](./data_viz.png)
 
