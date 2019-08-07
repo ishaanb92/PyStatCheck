@@ -23,7 +23,7 @@ cd pystatcheck
 
 ## Usage
 
-A small example:
+### Homogeneity Checks
 
 ```python
 from pystatcheck.tests import CheckHomogeneity
@@ -34,10 +34,31 @@ arr2 = np.random.normal(loc=0, scale=3.0, size=(1000,))
 statChecker = CheckHomogeneity(arr1=arr1, arr2=arr2, verbose=False)
 print(statChecker.perform_homogeneity_tests())  # Expected output is 'True' 
 ```
+### Qualitative Analysis
 
-## TODO(s)
+Alternatively, for a more qualitative analysis of the distributions 
+(in case of a tiny sample size), it also possible to visualize an estimate 
+of the population distribution via bootstrapping.
 
-* Add function to increase number of samples via bootstrapping 
+```python
+arr1 = np.random.normal(loc=0, scale=2.0, size=(10,))
+arr2 = np.random.normal(loc=1, scale=2.0, size=(10,))
+
+statChecker = CheckHomogeneity(arr1=arr1, arr2=arr2, verbose=False)
+print(statChecker.perform_homogeneity_tests()) # Returns True (!)
+```
+At a significance of 0.05, the null hypothesis cannot be rejected,
+even though the distributions are clearly different from each other. 
+
+In case of low sample-sizes, it is always useful to create many bootstrapped 
+samples and plot the sample means in a histogram to qualitatively examine the distributions.
+```python
+statChecker.visualize_distributions() 
+```
+![Dist Image](./data_viz.png)
+
+
+
 
 Note
 ====
