@@ -7,11 +7,15 @@ If the 'perform_homogeneity_tests()' function returns True, it means that the ch
 Author: Ishaan Bhat (ibhat@umcutrecht.nl)
 
 """
-from scipy.stats import shapiro
+import numpy as np
+from scipy.stats import normaltest
 from scipy.stats import bartlett
 from scipy.stats import levene
 from scipy.stats import ttest_ind
 from scipy.stats import mannwhitneyu
+from sklearn.utils import resample
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 
 class CheckHomogeneity:
@@ -25,6 +29,19 @@ class CheckHomogeneity:
 
     """
     def __init__(self, arr1, arr2, alpha=0.05, verbose=False):
+
+        try:
+            assert(isinstance(arr1, np.ndarray) and isinstance(arr2, np.ndarray))
+        except AssertionError:
+            print("PyStatCheck works with numpy ndarrays."
+                  "Please convert your iterable object to a numpy array")
+
+        try:
+            assert((arr1.ndim == 1) and (arr2.ndim == 1))
+        except AssertionError:
+            print("PyStatCheck works with 1D sample arrays."
+                  "The given arrays are of the dimensions {} and {} respectively".format(arr1.ndim, arr2.ndim))
+
         self.arr1 = arr1
         self.arr2 = arr2
         self.verbose = verbose
@@ -37,7 +54,7 @@ class CheckHomogeneity:
         except AssertionError:
             print('The 2 arrays must be of the same shape')
 
-        if self.check_normality(self.arr1) is True and self.check_normality(self.arr2) is True:
+        if self._check_normality(self.arr1) is True and self._check_normality(self.arr2) is True:
             # Tests for data with normal distributions
             _, p = bartlett(self.arr1, self.arr2)
             if p > self.alpha:
@@ -91,13 +108,34 @@ class CheckHomogeneity:
                           'p-value : {}'.format(p))
                 return False
 
+    def visualize_distributions(self, fname='data_viz.png'):
+        sample_means_arr1 = self._bootstrap(self.arr1)
+        sample_means_arr2 = self._bootstrap(self.arr2)
+        sns.distplot(sample_means_arr1, label='Distribution 1')
+        sns.distplot(sample_means_arr2, label='Distribution 2')
+        plt.legend()
+        plt.savefig(fname)
+
     @staticmethod
-    def check_normality(col):
+    def _bootstrap(col, b_steps=1000):
+        """
+        Estimate population distribution by bootstrapping the sample distribution
+
+        :param col:
+        :param b_steps:
+        :return: sample_means: (numpy ndarray) Array containing means of bootstrapped samples
+        """
+        sample_means = []
+        for step in range(b_steps):
+            sample_means.append(np.mean(resample(col)))
+        return np.asarray(sample_means, dtype=np.float32)
+
+    def _check_normality(self, col):
         """
         Check for normality
         """
-        _, p = shapiro(col)
-        if p > 0.05:
+        _, p = normaltest(col)
+        if p > self.alpha:
             return True
 
         return False
