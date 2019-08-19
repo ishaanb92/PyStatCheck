@@ -4,7 +4,8 @@ Perform statistical tests on paired (column) data.
 One of the key use-cases is comparing some performance metric for a task before and after applying your own changes.
 If the 'perform_homogeneity_tests()' function returns True, it means that the change has had no effect on the metric
 
-Author: Ishaan Bhat (ibhat@umcutrecht.nl)
+@author: Ishaan Bhat
+@email: ishaan@isi.uu.nl
 
 """
 import numpy as np
@@ -108,13 +109,14 @@ class CheckHomogeneity:
                           'p-value : {}'.format(p))
                 return False
 
-    def visualize_distributions(self, fname='data_viz.png', b_steps=1000, names=None):
+    def visualize_distributions(self, fname='data_viz.png', b_steps=1000, names=None, title=None):
         """
         Visualize distribution plots by by plotting a histogram of bootstrap sample means
 
         :param fname: (str) Filename used to save the image
         :param b_steps: (int) Number of sampling steps to create one bootstrap sample
-        :param names: (str) List of strings to be used as a the name
+        :param names: (str) List of strings to be used as legend
+        :param title: (str) Title of the figure
         :return:
         """
         sample_means_arr1 = self._bootstrap(self.arr1, b_steps=b_steps)
@@ -123,9 +125,13 @@ class CheckHomogeneity:
             labels = ['Distribution 1', 'Distribution 2']
         else:
             labels = names
+
         sns.distplot(sample_means_arr1, label=labels[0])
         sns.distplot(sample_means_arr2, label=labels[1])
+
         plt.legend()
+        if title is not None:
+            plt.title(title)
         plt.savefig(fname)
         plt.close()
 
